@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">PowerHome</string>
+    <string name="creeUnCompte">Créer un compte</string>
+    <string name="nouveau_compte">Créer un nouveau compte</string>
+    <string name="prenom">Prénom</string>
+    <string name="nom">Nom</string>
+    <string name="email">E-mail</string>
+    <string name="mot_de_passe">Mot de passe</string>
+    <string name="mobile">Mobile</string>
+
+    <string-array name="pays">
+        <item>+33</item>
+        <item>+1</item>
+        <item>+44</item>
+        <item>+49</item>
+        <item>+34</item>
+        <item>+39</item>
+    </string-array>
+    <string name="inscription">INSCRIVEZ-VOUS</string>
+</resources>
