@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PowerHome</string>
+    <string name="creeUnCompte">Crear una cuenta</string>
+    <string name="nouveau_compte">Crear una nueva cuenta</string>
+    <string name="prenom">Nombre</string>
+    <string name="nom">Apellido</string>
+    <string name="email">Correo electrónico</string>
+    <string name="mot_de_passe">Contraseña</string>
+    <string name="mobile">Móvil</string>
+    <string name="inscription">REGISTRARSE</string>
+</resources>
