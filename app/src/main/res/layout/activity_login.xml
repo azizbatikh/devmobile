@@ -113,7 +113,8 @@
         android:text="MOT DE PASSE OUBLIÉ ?"
         android:textColor="@color/blue"
         android:textSize="16dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        />
 
     <Button
         android:id="@+id/connectionbutton"

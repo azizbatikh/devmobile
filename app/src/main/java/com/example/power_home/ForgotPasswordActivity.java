@@ -1,75 +1,71 @@
 package com.example.power_home;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class LoginActivity extends AppCompatActivity {
+public class ForgotPasswordActivity extends AppCompatActivity {
 
-    EditText emailInput, passwordInput;
-    Button loginButton;
+    EditText emailInput;
+    Button recoverButton;
+    TextView resultText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login); // adapte si ton layout a un autre nom
+        setContentView(R.layout.activity_forgot_password);
 
         emailInput = findViewById(R.id.emailInput);
-        passwordInput = findViewById(R.id.passwordinput);
-        loginButton = findViewById(R.id.connectionbutton);
-        Button mdpoublie = findViewById(R.id.MdpOublieButton);
+        recoverButton = findViewById(R.id.recoverButton);
+        resultText = findViewById(R.id.resultText);
 
-        loginButton.setOnClickListener(v -> {
+        recoverButton.setOnClickListener(v -> {
             String email = emailInput.getText().toString().trim();
-            String password = passwordInput.getText().toString().trim();
 
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
+            if (email.isEmpty()) {
+                Toast.makeText(this, "Veuillez entrer un email", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            loginUser(email, password);
-        });
-        mdpoublie.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-            startActivity(intent);
+            recoverPassword(email);
         });
     }
 
-    private void loginUser(String email, String password) {
+    private void recoverPassword(String email) {
         new Thread(() -> {
             try {
-                URL url = new URL("http://10.0.2.2/api/login.php");
+                URL url = new URL("http://10.0.2.2/api/forgot_password.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
                 conn.setDoOutput(true);
+                conn.setDoInput(true);
 
                 JSONObject jsonParam = new JSONObject();
+                Log.d("EmailSent", email);
                 jsonParam.put("email", email);
-                jsonParam.put("password", password);
 
                 OutputStream os = conn.getOutputStream();
                 os.write(jsonParam.toString().getBytes("UTF-8"));
                 os.close();
 
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                InputStream is = conn.getInputStream();
+                BufferedReader in = new BufferedReader(new InputStreamReader(is));
+
                 StringBuilder response = new StringBuilder();
                 String line;
                 while ((line = in.readLine()) != null) {
@@ -82,18 +78,16 @@ public class LoginActivity extends AppCompatActivity {
                 String message = jsonResponse.getString("message");
 
                 runOnUiThread(() -> {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     if (success) {
-                       Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
+                        resultText.setText("Mot de passe : " + message);
+                    } else {
+                        resultText.setText("Erreur : " + message);
                     }
                 });
 
             } catch (Exception e) {
                 e.printStackTrace();
-                runOnUiThread(() ->
-                        Toast.makeText(getApplicationContext(), "Erreur réseau", Toast.LENGTH_SHORT).show()
-                );
+                runOnUiThread(() -> resultText.setText("Erreur réseau ou serveur"));
             }
         }).start();
     }
