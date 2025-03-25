@@ -45,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             loginUser(email, password);
+            Intent intent = new Intent(LoginActivity.this, DrawerActivity.class);
+            startActivity(intent);
         });
         mdpoublie.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);

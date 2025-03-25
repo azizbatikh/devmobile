@@ -18,7 +18,7 @@
 
         <!-- Launcher -->
         <activity
-            android:name=".RegisterActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,7 @@
         </activity>
 
         <!-- Autres activités -->
-        <activity android:name=".LoginActivity" android:exported="true" />
+        <activity android:name=".RegisterActivity" android:exported="true" />
         <activity android:name=".MainActivity" android:exported="true" />
         <activity android:name=".EditUserActivity" android:exported="true" />
         <activity android:name=".ForgotPasswordActivity" android:exported="true" />
