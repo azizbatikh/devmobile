@@ -17,5 +17,8 @@
         <item>+34</item>
         <item>+39</item>
     </string-array>
+
     <string name="inscription">INSCRIVEZ-VOUS</string>
+    <string name="navigation_drawer_open" translatable="false">Ouvrir le menu</string>
+    <string name="navigation_drawer_close" translatable="false">Fermer le menu</string>
 </resources>

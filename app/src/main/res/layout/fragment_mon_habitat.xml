@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/nom_resident"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nom : Ismail Atchekzai"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/etage_resident"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Étage : 2"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Équipements :"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp" />
+
+        <LinearLayout
+            android:id="@+id/liste_equipements"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/puissance_totale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Consommation totale : 0W"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btn_reserver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Réserver un créneau éco-citoyen"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/button_square_drawer"
+            app:backgroundTint="@null"
+            />
+
+    </LinearLayout>
+</ScrollView>

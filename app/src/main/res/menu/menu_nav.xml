@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/nav_liste_habitats" android:title="Liste des habitats" />
+    <item android:id="@+id/nav_mon_habitat" android:title="Mon habitat" />
+    <item android:id="@+id/nav_notifications" android:title="Mes notifications" />
+    <item android:id="@+id/nav_preferences" android:title="Mes préférences" />
+    <item android:id="@+id/nav_apropos" android:title="À propos" />
+
+</menu>
