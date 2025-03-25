@@ -2,6 +2,7 @@ package com.example.power_home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,8 +16,11 @@ import androidx.core.view.WindowInsetsCompat;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -55,29 +59,41 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             registerUser( nom, email, password, telephone);
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
         });
     }
 
-    private void registerUser(String nom, String email, String password, String telephone) {
+    private void registerUser(String name, String email, String password, String telephone) {
         new Thread(() -> {
             try {
-                URL url = new URL("http://10.0.2.2/api/register.php"); // ⬅️ Le bon script ici
+                URL url = new URL("http://10.0.2.2/api/register.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
                 conn.setDoOutput(true);
+                conn.setDoInput(true);
 
+                // Préparer les données JSON
                 JSONObject jsonParam = new JSONObject();
-                jsonParam.put("name", nom);
+                jsonParam.put("name", name);
                 jsonParam.put("email", email);
                 jsonParam.put("password", password);
                 jsonParam.put("telephone", telephone);
 
+                // Envoyer le JSON au serveur
                 OutputStream os = conn.getOutputStream();
-                os.write(jsonParam.toString().getBytes("UTF-8"));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                writer.write(jsonParam.toString());
+                writer.flush();
+                writer.close();
                 os.close();
 
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                // Lire la réponse
+                int responseCode = conn.getResponseCode();
+                InputStream is = (responseCode >= 400) ? conn.getErrorStream() : conn.getInputStream();
+                BufferedReader in = new BufferedReader(new InputStreamReader(is));
+
                 StringBuilder response = new StringBuilder();
                 String line;
                 while ((line = in.readLine()) != null) {
@@ -89,20 +105,16 @@ public class RegisterActivity extends AppCompatActivity {
                 boolean success = jsonResponse.getBoolean("success");
                 String message = jsonResponse.getString("message");
 
-                runOnUiThread(() -> {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                    if (success) {
-//                        Intent intent = new Intent(RegisterActivity.this, .class);
-//                        startActivity(intent);
-                    }
-                });
+                runOnUiThread(() ->
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show()
+                );
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("REGISTER_ERROR", "Erreur réseau : " + e.getMessage());
                 runOnUiThread(() ->
                         Toast.makeText(getApplicationContext(), "Erreur réseau", Toast.LENGTH_SHORT).show()
                 );
             }
         }).start();
     }
-}
+    }
