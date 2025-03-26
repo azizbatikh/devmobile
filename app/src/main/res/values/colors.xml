@@ -4,5 +4,12 @@
     <color name="red">#FF0000</color>
     <color name="white">#FFFFFF</color>
     <color name="grey">#808080</color>
-    <color name="blue">#0000FF</color>
+    <color name="green">#00FF00</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="low_consumption">#4CAF50</color>       <!-- Vert -->
+    <color name="medium_consumption">#FF9800</color>    <!-- Orange -->
+    <color name="high_consumption">#F44336</color>      <!-- Rouge -->
+    <color name="blue">#2196F3</color>                  <!-- Bleu pour défaut -->
+
+
 </resources>

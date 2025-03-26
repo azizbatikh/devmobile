@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     if (success) {
-                       Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                       Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
                         startActivity(intent);
                     }
                 });
