@@ -2,60 +2,42 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/nom_resident"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nom : Ismail Atchekzai"
-            android:textSize="18sp"
+            android:id="@+id/nomResident"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/etage_resident"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Étage : 2"
-            android:layout_marginBottom="8dp" />
+            android:text="Nom du résident" />
 
         <TextView
+            android:id="@+id/etage"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Étage" />
+
+        <TextView
+            android:layout_marginTop="16dp"
             android:text="Équipements :"
-            android:textStyle="bold"
-            android:layout_marginTop="12dp" />
+            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:id="@+id/liste_equipements"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/listeAppareils"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/puissance_totale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Consommation totale : 0W"
-            android:layout_marginTop="16dp" />
-
-        <Button
-            android:id="@+id/btn_reserver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Réserver un créneau éco-citoyen"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/button_square_drawer"
-            app:backgroundTint="@null"
-            />
-
+            android:layout_marginTop="10dp" />
     </LinearLayout>
+
 </ScrollView>

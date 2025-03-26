@@ -3,7 +3,7 @@ package com.example.power_home;
 public class NotificationItem {
     private String titre;
     private String description;
-    private int type; // 0 = info, 1 = positif, 2 = alerte
+    private int type; //
 
     public NotificationItem(String titre, String description, int type) {
         this.titre = titre;

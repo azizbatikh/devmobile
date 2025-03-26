@@ -2,6 +2,8 @@ package com.example.power_home;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -18,11 +20,12 @@ public class DrawerActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private Toolbar toolbar;
+    private String email; // stocker l’email globalement
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_drawer); // ← Ton layout personnalisé
+        setContentView(R.layout.activity_main_drawer);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -30,6 +33,21 @@ public class DrawerActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer);
         navigationView = findViewById(R.id.navigationView);
 
+        // Récupérer l’email passé par LoginActivity
+        email = getIntent().getStringExtra("email");
+        Habitat habitat = HabitatRepository.getHabitatByEmail(email);
+
+        // Mettre à jour les infos du header
+        View headerView = navigationView.getHeaderView(0);
+        TextView navEmail = headerView.findViewById(R.id.header_email);
+        TextView navName = headerView.findViewById(R.id.header_nom);
+
+        navEmail.setText(email);
+        if (habitat != null) {
+            navName.setText(habitat.residentName);
+        }
+
+        // Toggle Drawer
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open,
@@ -37,49 +55,50 @@ public class DrawerActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Fragment par défaut
+        // Ouvrir par défaut la liste des habitats
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment, new ListHabitatFragment())
-                    .commit();
+            openFragmentWithEmail(new ListHabitatFragment(), email);
             navigationView.setCheckedItem(R.id.nav_liste_habitats);
         }
 
-
-
+        // Navigation entre les fragments
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment selectedFragment = null;
                 int id = item.getItemId();
 
                 if (id == R.id.nav_liste_habitats) {
-                    selectedFragment = new ListHabitatFragment();
+                    openFragmentWithEmail(new ListHabitatFragment(), email);
                 } else if (id == R.id.nav_mon_habitat) {
-                    selectedFragment = new MonHabitatFragment();
+                    openFragmentWithEmail(new MonHabitatFragment(), email);
                 } else if (id == R.id.nav_notifications) {
-                    selectedFragment = new MesNotifFragment();
+                    openFragmentWithEmail(new MesNotifFragment(), email);
                 } else if (id == R.id.nav_preferences) {
-                    selectedFragment = new MesPreferenceFragment();
+                    openFragmentWithEmail(new MesPreferenceFragment(), email);
                 } else if (id == R.id.nav_apropos) {
                     showAProposDialog();
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
                 }
 
-                if (selectedFragment != null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment, selectedFragment)
-                            .commit();
-                }
-
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
-
     }
 
+    // Méthode pour passer un fragment avec l'email
+    private void openFragmentWithEmail(Fragment fragment, String email) {
+        Bundle bundle = new Bundle();
+        bundle.putString("email", email);
+        fragment.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, fragment)
+                .commit();
+    }
+
+    // Affichage de la boîte "À propos"
     private void showAProposDialog() {
         new androidx.appcompat.app.AlertDialog.Builder(this)
                 .setTitle("À propos")
@@ -88,6 +107,7 @@ public class DrawerActivity extends AppCompatActivity {
                 .show();
     }
 
+    // Gestion du bouton retour
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

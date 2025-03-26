@@ -16,9 +16,7 @@ import java.util.List;
 
 public class ListHabitatFragment extends Fragment {
 
-    public ListHabitatFragment() {
-
-    }
+    public ListHabitatFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,40 +31,22 @@ public class ListHabitatFragment extends Fragment {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Liste des habitats");
         }
 
-        List<Habitat> list = new ArrayList<>();
+        // ✅ Récupère l'email du résident connecté
+        String emailConnecte = getArguments() != null ? getArguments().getString("email") : "";
 
-        Habitat h1 = new Habitat("Gaëtan Leclair", 1);
-        Habitat h2 = new Habitat("Cédric Boudet", 1);
-        Habitat h3 = new Habitat("Gaylord Thibodeaux", 2);
-        Habitat h4 = new Habitat("Adam Jacquinot", 3);
-        Habitat h5 = new Habitat("Abel Fresnel", 3);
+        // ✅ Récupère tous les habitats simulés
+        List<Habitat> allHabitats = HabitatRepository.getAll();
 
-        list.add(h1);
-        list.add(h2);
-        list.add(h3);
-        list.add(h4);
-        list.add(h5);
+        // ✅ Supprime celui de l'utilisateur connecté
+        List<Habitat> habitatsSansMoi = new ArrayList<>();
+        for (Habitat h : allHabitats) {
+            if (!h.email.equalsIgnoreCase(emailConnecte)) {
+                habitatsSansMoi.add(h);
+            }
+        }
 
-        Appliance aspi = new Appliance(1, "aspirateur", "as447", 30);
-        Appliance fer = new Appliance(2, "fer_a_repasser", "fer2890", 80);
-        Appliance clim = new Appliance(3, "climatiseur", "clim890", 90);
-        Appliance machine = new Appliance(4, "machine_a_laver", "machine879", 87);
-
-        h1.addAppliance(aspi);
-        h1.addAppliance(fer);
-        h1.addAppliance(clim);
-        h1.addAppliance(machine);
-        h2.addAppliance(machine);
-        h3.addAppliance(fer);
-        h3.addAppliance(aspi);
-        h4.addAppliance(aspi);
-        h4.addAppliance(fer);
-        h4.addAppliance(machine);
-        h5.addAppliance(aspi);
-
-        ListView ls = view.findViewById(R.id.listView);
-        HabitatAdapter adapter = new HabitatAdapter(getActivity(), list, R.layout.item_habitat);
-        ls.setAdapter(adapter);
+        ListView listView = view.findViewById(R.id.listView);
+        HabitatAdapter adapter = new HabitatAdapter(getActivity(), habitatsSansMoi, R.layout.item_habitat);
+        listView.setAdapter(adapter);
     }
-
 }

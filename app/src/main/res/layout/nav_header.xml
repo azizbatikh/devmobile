@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@android:color/holo_green_light"
-    android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="160dp"
-    android:gravity="bottom">
-
-
+    android:background="@android:color/holo_green_dark"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
-        android:id="@+id/nav_header_title"
+        android:id="@+id/header_nom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ismail"
-        android:textSize="18sp"
+        android:text="Nom"
         android:textColor="@android:color/white"
-        android:layout_marginTop="8dp" />
+        android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/nav_header_subtitle"
+        android:id="@+id/header_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ismail@email.com"
-        android:textColor="@android:color/white" />
+        android:text="email@example.com"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
 </LinearLayout>

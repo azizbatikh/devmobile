@@ -2,15 +2,12 @@ package com.example.power_home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import org.json.JSONObject;
 
@@ -28,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login); // adapte si ton layout a un autre nom
+        setContentView(R.layout.activity_login);
 
         emailInput = findViewById(R.id.emailInput);
         passwordInput = findViewById(R.id.passwordinput);
@@ -45,9 +42,8 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             loginUser(email, password);
-            Intent intent = new Intent(LoginActivity.this, DrawerActivity.class);
-            startActivity(intent);
         });
+
         mdpoublie.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
             startActivity(intent);
@@ -55,48 +51,33 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String email, String password) {
+        // Simule une "latence" réseau
         new Thread(() -> {
             try {
-                URL url = new URL("http://10.0.2.2/api/login.php");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Type", "application/json");
-                conn.setDoOutput(true);
-
-                JSONObject jsonParam = new JSONObject();
-                jsonParam.put("email", email);
-                jsonParam.put("password", password);
-
-                OutputStream os = conn.getOutputStream();
-                os.write(jsonParam.toString().getBytes("UTF-8"));
-                os.close();
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = in.readLine()) != null) {
-                    response.append(line);
-                }
-                in.close();
-
-                JSONObject jsonResponse = new JSONObject(response.toString());
-                boolean success = jsonResponse.getBoolean("success");
-                String message = jsonResponse.getString("message");
+                Thread.sleep(1000); // optionnel, juste pour le réalisme
 
                 runOnUiThread(() -> {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    // Simule une réponse JSON avec success = true
+                    boolean success = true;
+                    String message = "Connexion simulée réussie";
+
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
                     if (success) {
-                       Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, DrawerActivity.class);
+                        intent.putExtra("email", email);
                         startActivity(intent);
+                        finish();
                     }
                 });
 
             } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() ->
-                        Toast.makeText(getApplicationContext(), "Erreur réseau", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(getApplicationContext(), "Erreur réseau simulée", Toast.LENGTH_SHORT).show()
                 );
             }
         }).start();
     }
+
 }

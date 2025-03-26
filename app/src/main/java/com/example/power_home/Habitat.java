@@ -6,18 +6,18 @@ import java.util.List;
 public class Habitat {
 
 
-    String residentName;
-    int floor;
-    List<Appliance> list;
+    public String email;
+    public String residentName;
+    public int floor;
+    public List<Appliance> list;
 
-    public Habitat(String residentName, int floor){
-
+    public Habitat(String residentName, int floor, String email) {
         this.residentName = residentName;
         this.floor = floor;
+        this.email = email;
         this.list = new ArrayList<>();
-
-
     }
+
 
     public void addAppliance(Appliance a){
 
