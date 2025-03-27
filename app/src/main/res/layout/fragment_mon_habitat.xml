@@ -26,7 +26,16 @@
             android:text="Étage" />
 
         <TextView
-            android:layout_marginTop="16dp"
+            android:id="@+id/consoTotale"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="Consommation estimée : -- kWh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginTop="20dp"
             android:text="Équipements :"
             android:textSize="18sp"
             android:layout_width="wrap_content"
@@ -39,5 +48,4 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp" />
     </LinearLayout>
-
 </ScrollView>

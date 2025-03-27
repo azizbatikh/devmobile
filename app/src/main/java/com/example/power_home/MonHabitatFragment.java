@@ -25,11 +25,10 @@ import java.net.URL;
 
 public class MonHabitatFragment extends Fragment {
 
-    public MonHabitatFragment() { }
+    public MonHabitatFragment() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_mon_habitat, container, false);
     }
 
@@ -41,15 +40,15 @@ public class MonHabitatFragment extends Fragment {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Mon habitat");
         }
 
-        // Récupérer l’email depuis les arguments
         String email = getArguments() != null ? getArguments().getString("email") : "";
 
-        // Références UI
+        // Récupérer les vues
         TextView nameView = view.findViewById(R.id.nomResident);
         TextView etageView = view.findViewById(R.id.etage);
+        TextView consoView = view.findViewById(R.id.consoTotale);
         LinearLayout appareilsLayout = view.findViewById(R.id.listeAppareils);
 
-        // Appel réseau pour récupérer l'habitat du user
+        // Appel API
         new Thread(() -> {
             try {
                 URL url = new URL("http://10.0.2.2/api/getMonHabitat.php");
@@ -78,11 +77,13 @@ public class MonHabitatFragment extends Fragment {
                 if (json.getBoolean("success")) {
                     String name = json.getString("name");
                     int etage = json.getInt("etage");
+                    int consommation = json.getInt("consommation");
                     JSONArray appareils = json.getJSONArray("equipments");
 
                     requireActivity().runOnUiThread(() -> {
                         nameView.setText(name);
                         etageView.setText("Étage : " + etage);
+                        consoView.setText("Consommation estimée : " + consommation + " kWh");
 
                         appareilsLayout.removeAllViews();
 
@@ -95,7 +96,7 @@ public class MonHabitatFragment extends Fragment {
                                 image.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
                                 image.setPadding(10, 10, 10, 10);
 
-                                // Exemple simple : affiche une image différente selon le nom
+                                // Affiche une icône selon le nom de l'équipement
                                 switch (nom) {
                                     case "aspirateur":
                                         image.setImageResource(R.drawable.ic_aspirateur);
@@ -120,13 +121,15 @@ public class MonHabitatFragment extends Fragment {
                     });
                 } else {
                     requireActivity().runOnUiThread(() ->
-                            nameView.setText("Habitat non trouvé"));
+                            nameView.setText("Habitat non trouvé")
+                    );
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
                 requireActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Erreur de chargement", Toast.LENGTH_SHORT).show());
+                        Toast.makeText(getContext(), "Erreur lors du chargement", Toast.LENGTH_SHORT).show()
+                );
             }
         }).start();
     }
