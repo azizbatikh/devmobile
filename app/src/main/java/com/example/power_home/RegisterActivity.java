@@ -44,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         prenomInput = findViewById(R.id.prenominput);
         nomInput = findViewById(R.id.nominput);
         telephoneInput = findViewById(R.id.telephoneinput);
+        EditText etageInput = findViewById(R.id.etageinput);
         registerButton = findViewById(R.id.loginbutton); // Change l’ID plus tard si besoin
 
         registerButton.setOnClickListener(v -> {
@@ -52,19 +53,20 @@ public class RegisterActivity extends AppCompatActivity {
             String prenom = prenomInput.getText().toString().trim();
             String nom = nomInput.getText().toString().trim()+ " "+ prenom;
             String telephone = telephoneInput.getText().toString().trim();
+            String etageStr = etageInput.getText().toString().trim();
 
-            if (email.isEmpty() || password.isEmpty() || prenom.isEmpty() || nom.isEmpty() || telephone.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty() || prenom.isEmpty() || nom.isEmpty() || telephone.isEmpty()|| etageStr.isEmpty()) {
                 Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            registerUser( nom, email, password, telephone);
+            registerUser( nom, email, password, telephone , etageStr);
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
         });
     }
 
-    private void registerUser(String name, String email, String password, String telephone) {
+    private void registerUser(String name, String email, String password, String telephone , String etageStr) {
         new Thread(() -> {
             try {
                 URL url = new URL("http://10.0.2.2/api/register.php");
@@ -80,6 +82,8 @@ public class RegisterActivity extends AppCompatActivity {
                 jsonParam.put("email", email);
                 jsonParam.put("password", password);
                 jsonParam.put("telephone", telephone);
+                jsonParam.put("etage", etageStr);
+
 
                 // Envoyer le JSON au serveur
                 OutputStream os = conn.getOutputStream();

@@ -11,6 +11,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,34 +37,65 @@ public class MesNotifFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Mes notifications");
 
         ListView listView = view.findViewById(R.id.notification_list);
-        String email = getActivity().getIntent().getStringExtra("email");
+        String email = getArguments() != null ? getArguments().getString("email") : null;
 
         List<NotificationItem> list = new ArrayList<>();
 
         if (email != null) {
-            switch (email) {
-                case "ismail@gmail.com":
-                    list.add(new NotificationItem("Bravo Ismail !", "Vous avez gagné 10 éco-coins hier soir.", 1));
-                    list.add(new NotificationItem("Alerte", "Votre aspirateur a consommé +20% hier.", 2));
-                    break;
+            new Thread(() -> {
+                try {
+                    URL url = new URL("http://10.0.2.2/api/getNotifications.php");
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Content-Type", "application/json");
+                    conn.setDoOutput(true);
 
-                case "aziz@gmail.com":
-                    list.add(new NotificationItem("Info", "Un nouveau créneau éco est dispo demain à 21h.", 0));
-                    list.add(new NotificationItem("Attention Aziz !", "Le lave-linge a été utilisé en période rouge.", 2));
-                    break;
+                    JSONObject jsonParam = new JSONObject();
+                    jsonParam.put("email", email);
 
-                case "halima@gmail.com":
-                    list.add(new NotificationItem("Halima, bravo !", "Votre clim a été bien utilisée, conso optimisée.", 1));
-                    list.add(new NotificationItem("Info", "Vous avez accès à un bonus de 5 éco-coins.", 0));
-                    break;
+                    OutputStream os = conn.getOutputStream();
+                    os.write(jsonParam.toString().getBytes("UTF-8"));
+                    os.close();
 
-                default:
-                    list.add(new NotificationItem("Bienvenue !", "Aucune nouvelle notification pour le moment.", 0));
-                    break;
-            }
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    reader.close();
+
+                    JSONObject json = new JSONObject(response.toString());
+
+                    if (json.getBoolean("success")) {
+                        JSONArray notifArray = json.getJSONArray("notifications");
+
+                        for (int i = 0; i < notifArray.length(); i++) {
+                            JSONObject n = notifArray.getJSONObject(i);
+                            list.add(new NotificationItem(
+                                    n.getString("titre"),
+                                    n.getString("message"),
+                                    n.getInt("type")
+                            ));
+                        }
+                    } else {
+                        list.add(new NotificationItem("Info", "Aucune notification trouvée.", 0));
+                    }
+
+                    requireActivity().runOnUiThread(() -> {
+                        NotificationAdapter adapter = new NotificationAdapter(getActivity(), list, R.layout.item_notification);
+                        listView.setAdapter(adapter);
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    requireActivity().runOnUiThread(() -> {
+                        list.add(new NotificationItem("Erreur", "Impossible de charger les notifications.", 2));
+                        NotificationAdapter adapter = new NotificationAdapter(getActivity(), list, R.layout.item_notification);
+                        listView.setAdapter(adapter);
+                    });
+                }
+            }).start();
         }
-
-        NotificationAdapter adapter = new NotificationAdapter(getActivity(), list, R.layout.item_notification);
-        listView.setAdapter(adapter);
     }
 }

@@ -86,7 +86,11 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     if (success) {
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        getSharedPreferences("power_home_prefs", MODE_PRIVATE)
+                                .edit()
+                                .putString("email", email)
+                                .apply();
+                        Intent intent = new Intent(LoginActivity.this, DrawerActivity.class);
                         startActivity(intent);
                     }
                 });
