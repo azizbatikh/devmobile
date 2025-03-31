@@ -1,6 +1,9 @@
 package com.example.power_home;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,7 +48,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
         Button retourlogin = findViewById(R.id.retourlogin);
         retourlogin.setOnClickListener(v -> {
-            finish();
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }, 1000);
         });
     }
 

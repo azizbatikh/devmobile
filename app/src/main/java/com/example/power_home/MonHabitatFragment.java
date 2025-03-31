@@ -96,7 +96,6 @@ public class MonHabitatFragment extends Fragment {
                                 image.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
                                 image.setPadding(10, 10, 10, 10);
 
-                                // Affiche une icône selon le nom de l'équipement
                                 switch (nom) {
                                     case "aspirateur":
                                         image.setImageResource(R.drawable.ic_aspirateur);

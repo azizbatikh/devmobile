@@ -39,7 +39,7 @@ public class CalendarActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 7));
 
-        // ⚠️ Initialise l’adaptateur ici AVANT d'appeler le fetch
+
         calendarAdapter = new CalendarAdapter(days, consommationMap);
         recyclerView.setAdapter(calendarAdapter);
         Log.d("Calendar", "Adapter attaché avec " + days.size() + " jours");
@@ -57,7 +57,7 @@ public class CalendarActivity extends AppCompatActivity {
     private void fetchConsumptionData() {
         new Thread(() -> {
             try {
-                URL url = new URL("http://10.0.2.2/api/get_consumption.php");  // Vérifie si c'est l'URL correcte
+                URL url = new URL("http://10.0.2.2/api/get_consumption.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
 
@@ -69,7 +69,7 @@ public class CalendarActivity extends AppCompatActivity {
                 }
                 in.close();
 
-                // Logguer la réponse pour voir les données reçues
+
                 Log.d("API Response", response.toString());
 
                 JSONObject jsonResponse = new JSONObject(response.toString());
@@ -108,10 +108,10 @@ public class CalendarActivity extends AppCompatActivity {
             }
         }
 
-        // Regénérer les jours
+
         generateDays();
 
-        // Et notifie l’adaptateur du changement
+
         runOnUiThread(() -> calendarAdapter.notifyDataSetChanged());
     }
 

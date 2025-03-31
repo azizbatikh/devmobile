@@ -139,9 +139,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="45dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
-            android:text="Nouveau sur Jumia?"
+            android:text="Nouveau sur PowerHome ?"
             android:textSize="18dp"
 
             />

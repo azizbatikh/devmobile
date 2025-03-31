@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,7 +33,7 @@ public class DrawerActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private Toolbar toolbar;
 
-    private String email; // récupéré via SharedPreferences
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,20 +44,28 @@ public class DrawerActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("power_home_prefs", MODE_PRIVATE);
         email = prefs.getString("email", null);
 
-        // 🛠️ UI setup
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer);
         navigationView = findViewById(R.id.navigationView);
 
-        // 📥 Header : nom, email, étage
         View headerView = navigationView.getHeaderView(0);
         TextView navName = headerView.findViewById(R.id.header_nom);
         TextView navEmail = headerView.findViewById(R.id.header_email);
         TextView navEtage = headerView.findViewById(R.id.header_etage);
+        ImageView reglageIcon = headerView.findViewById(R.id.reglage); // 👈 ici
 
         navEmail.setText(email);
+
+        reglageIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DrawerActivity.this, EditUserActivity.class);
+                intent.putExtra("email", email);
+                startActivity(intent);
+            }
+        });
 
         Button btn = findViewById(R.id.reservationbtn);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +77,7 @@ public class DrawerActivity extends AppCompatActivity {
                                });
 
 
-        // 🌐 Charger nom & étage depuis la BDD
+
         new Thread(() -> {
             try {
                 URL url = new URL("http://10.0.2.2/api/getUserInfo.php");
@@ -114,7 +123,7 @@ public class DrawerActivity extends AppCompatActivity {
             }
         }).start();
 
-        // 🎛️ Drawer toggle
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open,
@@ -122,13 +131,13 @@ public class DrawerActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // 📦 Ouvrir par défaut la liste des habitats
+
         if (savedInstanceState == null) {
             openFragmentWithEmail(new ListHabitatFragment(), email);
             navigationView.setCheckedItem(R.id.nav_liste_habitats);
         }
 
-        // 📚 Navigation
+
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
 
@@ -151,7 +160,7 @@ public class DrawerActivity extends AppCompatActivity {
         });
     }
 
-    // Fragment passer avec email
+
     private void openFragmentWithEmail(Fragment fragment, String email) {
         Bundle bundle = new Bundle();
         bundle.putString("email", email);

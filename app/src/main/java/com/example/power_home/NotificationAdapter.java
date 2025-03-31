@@ -43,7 +43,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         title.setText(item.getTitre());
         desc.setText(item.getDescription());
 
-        // Change la couleur du titre selon le type de notif
+
         switch (item.getType()) {
             case 1: title.setTextColor(Color.parseColor("#4CAF50")); break; // Vert
             case 2: title.setTextColor(Color.parseColor("#F44336")); break; // Rouge

@@ -1,5 +1,6 @@
 package com.example.power_home;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,7 +38,8 @@ public class EditUserActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.saveButton);
 
         // Récupère l'email passé depuis l'activité précédente
-        userEmail = getIntent().getStringExtra("email");
+        SharedPreferences prefs = getSharedPreferences("power_home_prefs", MODE_PRIVATE);
+        userEmail = prefs.getString("email", null);
         if (userEmail != null && !userEmail.isEmpty()) {
             fetchUserData(userEmail);
         }
@@ -48,9 +50,19 @@ public class EditUserActivity extends AppCompatActivity {
     private void fetchUserData(String email) {
         new Thread(() -> {
             try {
-                URL url = new URL("http://10.0.2.2/api/get_user.php?email=" + email);
+                URL url = new URL("http://10.0.2.2/api/get_user.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+
+                JSONObject jsonParam = new JSONObject();
+                jsonParam.put("email", email);
+
+                OutputStream os = conn.getOutputStream();
+                os.write(jsonParam.toString().getBytes("UTF-8"));
+                os.close();
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder response = new StringBuilder();
@@ -62,26 +74,29 @@ public class EditUserActivity extends AppCompatActivity {
 
                 JSONObject json = new JSONObject(response.toString());
                 if (json.getBoolean("success")) {
-                    JSONObject user = json.getJSONObject("user");
+                    String name = json.optString("name");
+                    String etage = json.optString("etage");
+                    String telephone = json.optString("telephone");
+                    String[] parts = name.split(" ", 2);
+                    String prenom = parts.length > 0 ? parts[0] : "";
+                    String nom = parts.length > 1 ? parts[1] : "";
 
                     runOnUiThread(() -> {
-                        nomInput.setText(user.optString("nom"));
-                        prenomInput.setText(user.optString("prenom"));
-                        emailInput.setText(user.optString("email"));
-                        telephoneInput.setText(user.optString("telephone"));
-                        // Ne pas préremplir le mot de passe pour la sécurité
+                        nomInput.setText(nom);
+                        prenomInput.setText(prenom);
+                        emailInput.setText(email);
+                        telephoneInput.setText(telephone);
                     });
 
+
                 } else {
-                    runOnUiThread(() ->
-                            {
-                                try {
-                                    Toast.makeText(this, "Erreur : " + json.getString("message"), Toast.LENGTH_SHORT).show();
-                                } catch (JSONException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                    );
+                    runOnUiThread(() -> {
+                        try {
+                            Toast.makeText(this, "Erreur : " + json.getString("message"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
                 }
 
             } catch (Exception e) {
@@ -92,7 +107,6 @@ public class EditUserActivity extends AppCompatActivity {
             }
         }).start();
     }
-
     private void updateUser() {
         String nom = nomInput.getText().toString().trim();
         String prenom = prenomInput.getText().toString().trim();
