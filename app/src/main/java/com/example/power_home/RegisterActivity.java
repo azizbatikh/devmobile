@@ -2,6 +2,8 @@ package com.example.power_home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -62,8 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             registerUser( nom, email, password, telephone , etageStr);
-            Intent intent = new Intent(RegisterActivity.this, DrawerActivity.class);
-            startActivity(intent);
+
         });
         ImageView backbutton = findViewById(R.id.retourlogin);
         backbutton.setOnClickListener(v -> {
@@ -115,9 +116,23 @@ public class RegisterActivity extends AppCompatActivity {
                 boolean success = jsonResponse.getBoolean("success");
                 String message = jsonResponse.getString("message");
 
-                runOnUiThread(() ->
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show()
-                );
+                runOnUiThread(() -> {
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    if (success) {
+                        // Sauvegarder l'email
+                        getSharedPreferences("power_home_prefs", MODE_PRIVATE)
+                                .edit()
+                                .putString("email", email)
+                                .apply();
+
+
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            Intent intent = new Intent(RegisterActivity.this, DrawerActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }, 1000);
+                    }
+                });
 
             } catch (Exception e) {
                 Log.e("REGISTER_ERROR", "Erreur réseau : " + e.getMessage());

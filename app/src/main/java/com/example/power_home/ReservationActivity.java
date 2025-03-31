@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -159,6 +160,7 @@ public class ReservationActivity extends AppCompatActivity {
                 in.close();
 
                 JSONObject jsonResponse = new JSONObject(response.toString());
+                Log.d("DEBUG_RESPONSE", response.toString());
                 boolean success = jsonResponse.getBoolean("success");
                 String message = jsonResponse.getString("message");
 

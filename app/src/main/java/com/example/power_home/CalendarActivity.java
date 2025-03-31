@@ -2,6 +2,8 @@ package com.example.power_home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
@@ -45,10 +47,11 @@ public class CalendarActivity extends AppCompatActivity {
         fetchConsumptionData();
 
         Button btn = findViewById(R.id.reservationButton);
-        btn.setOnClickListener(v -> {
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent intent = new Intent(CalendarActivity.this, DrawerActivity.class);
             startActivity(intent);
-        });
+            finish();
+        }, 3000);
     }
 
     private void fetchConsumptionData() {
