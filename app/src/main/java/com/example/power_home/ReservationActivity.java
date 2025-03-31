@@ -1,6 +1,8 @@
 package com.example.power_home;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,7 +30,8 @@ public class ReservationActivity extends AppCompatActivity {
     Spinner equipmentSpinner, timeSlotSpinner;
     Button reserveButton;
     String selectedDate = "";
-    String userEmail = "toto@gmail.com"; // À remplacer par SharedPreferences si besoin
+
+    String userEmail ;
 
     List<String> equipmentNames = new ArrayList<>();
     Map<String, Integer> equipmentMap = new HashMap<>();
@@ -45,6 +48,8 @@ public class ReservationActivity extends AppCompatActivity {
         setupTimeSlots();
         showDatePicker();
         loadEquipments();
+        SharedPreferences prefs = getSharedPreferences("power_home_prefs", MODE_PRIVATE);
+        userEmail = prefs.getString("email", null);
 
         reserveButton.setOnClickListener(v -> {
             String selectedEquipment = (String) equipmentSpinner.getSelectedItem();
@@ -157,7 +162,14 @@ public class ReservationActivity extends AppCompatActivity {
                 boolean success = jsonResponse.getBoolean("success");
                 String message = jsonResponse.getString("message");
 
-                runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_LONG).show());
+                runOnUiThread(() -> {
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                    if (success) {
+                        Intent intent = new Intent(ReservationActivity.this, CalendarActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
 
             } catch (Exception e) {
                 e.printStackTrace();

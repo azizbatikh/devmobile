@@ -45,11 +45,14 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             loginUser(email, password);
-            Intent intent = new Intent(LoginActivity.this, DrawerActivity.class);
-            startActivity(intent);
         });
         mdpoublie.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+        });
+        Button creercompte = findViewById(R.id.creercompte);
+        creercompte.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
     }
@@ -86,12 +89,16 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     if (success) {
+                        // Sauvegarder l'email
                         getSharedPreferences("power_home_prefs", MODE_PRIVATE)
                                 .edit()
                                 .putString("email", email)
                                 .apply();
+
+
                         Intent intent = new Intent(LoginActivity.this, DrawerActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 });
 

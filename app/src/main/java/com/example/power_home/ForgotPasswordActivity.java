@@ -43,6 +43,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
             recoverPassword(email);
         });
+        Button retourlogin = findViewById(R.id.retourlogin);
+        retourlogin.setOnClickListener(v -> {
+            finish();
+        });
     }
 
     private void recoverPassword(String email) {

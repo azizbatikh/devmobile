@@ -1,9 +1,11 @@
 package com.example.power_home;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -54,7 +56,17 @@ public class DrawerActivity extends AppCompatActivity {
         TextView navEmail = headerView.findViewById(R.id.header_email);
         TextView navEtage = headerView.findViewById(R.id.header_etage);
 
-        navEmail.setText(email); // On affiche l’email directement
+        navEmail.setText(email);
+
+        Button btn = findViewById(R.id.reservationbtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View v) {
+                                       Intent intent = new Intent(DrawerActivity.this, ReservationActivity.class);
+                                       startActivity(intent);
+                                   }
+                               });
+
 
         // 🌐 Charger nom & étage depuis la BDD
         new Thread(() -> {

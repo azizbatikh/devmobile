@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -61,6 +62,11 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             registerUser( nom, email, password, telephone , etageStr);
+            Intent intent = new Intent(RegisterActivity.this, DrawerActivity.class);
+            startActivity(intent);
+        });
+        ImageView backbutton = findViewById(R.id.retourlogin);
+        backbutton.setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
         });

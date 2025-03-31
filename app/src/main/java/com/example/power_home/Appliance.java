@@ -17,17 +17,11 @@ public class Appliance {
     }
 
     public int getApplicance() {
-        switch (this.name) {
-            case "aspirateur":
-                return R.drawable.ic_aspirateur;
-            case "machine_a_laver":
-                return R.drawable.ic_machine_a_laver;
-            case "climatiseur":
-                return R.drawable.ic_climatiseur;
-            case "fer_a_repasser":
-                return R.drawable.ic_fer_a_repasser;
-            default:
-                return R.drawable.ic_launcher_background;
-        }
+        String n = name.toLowerCase();
+        if (n.contains("aspirateur")) return R.drawable.ic_aspirateur;
+        if (n.contains("machine")) return R.drawable.ic_machine_a_laver;
+        if (n.contains("climatiseur")) return R.drawable.ic_climatiseur;
+        if (n.contains("fer")) return R.drawable.ic_fer_a_repasser;
+        return R.drawable.ic_launcher_background;
     }
 }

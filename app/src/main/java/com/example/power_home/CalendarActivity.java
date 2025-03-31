@@ -1,7 +1,9 @@
 package com.example.power_home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,8 +42,13 @@ public class CalendarActivity extends AppCompatActivity {
         recyclerView.setAdapter(calendarAdapter);
         Log.d("Calendar", "Adapter attaché avec " + days.size() + " jours");
 
-        // Ensuite on peut récupérer les données
         fetchConsumptionData();
+
+        Button btn = findViewById(R.id.reservationButton);
+        btn.setOnClickListener(v -> {
+            Intent intent = new Intent(CalendarActivity.this, DrawerActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void fetchConsumptionData() {

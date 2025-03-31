@@ -83,11 +83,21 @@ public class ListHabitatFragment extends Fragment {
                     String email = obj.getString("email");
                     int etage = obj.getInt("etage");
                     int count = obj.getInt("equipment_count");
-
                     Habitat h = new Habitat(name, etage, email);
-                    for (int j = 0; j < count; j++) {
-                        h.addAppliance(new Appliance(0, "Équipement", "GEN", 0));
+
+                    JSONArray equipmentsArray = obj.optJSONArray("equipments");
+                    if (equipmentsArray != null) {
+                        for (int j = 0; j < equipmentsArray.length(); j++) {
+                            String equipName = equipmentsArray.getString(j);
+                            h.addAppliance(new Appliance(0, equipName, "GEN", 0));
+                        }
+                    } else {
+                        // fallback si jamais la liste est vide mais count existe
+                        for (int j = 0; j < count; j++) {
+                            h.addAppliance(new Appliance(0, "Équipement", "GEN", 0));
+                        }
                     }
+
 
                     habitatList.add(h);
                 }

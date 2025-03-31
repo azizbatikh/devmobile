@@ -114,6 +114,7 @@
         android:textColor="@color/blue"
         android:textSize="16dp"
         android:textStyle="bold"
+        android:clickable="true"
         />
 
     <Button
@@ -152,7 +153,9 @@
             android:text="CRÉÉ UN COMPTE"
             android:textColor="@color/blue"
             android:textSize="17dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:id="@+id/creercompte"
+            />
 
 
     </LinearLayout>
