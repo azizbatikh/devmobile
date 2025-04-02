@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">PowerHome</string>
+    <string name="app_name" translatable="false">Devveloped by Mohamed and Ismail </string>
     <string name="creeUnCompte">Créer un compte</string>
     <string name="nouveau_compte">Créer un nouveau compte</string>
     <string name="prenom">Prénom</string>
